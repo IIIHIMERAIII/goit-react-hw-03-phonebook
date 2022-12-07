@@ -15,6 +15,20 @@ export class App extends React.Component {
     filter: '',
   };
 
+
+  componentDidMount() {
+    const contacts = JSON.parse(localStorage.getItem("CONTACTS"));
+    if (contacts) {
+      this.setState({ contacts });
+    }
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem("CONTACTS", JSON.stringify(this.state.contacts));
+    }
+  };
+
   addContact = contact => {
     if (
       this.state.contacts.find(
