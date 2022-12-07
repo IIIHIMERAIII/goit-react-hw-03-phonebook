@@ -1,28 +1,15 @@
 import PropTypes from 'prop-types';
-import {StyledDiv, Label, Input, List, ListItem, ListButton} from "./phonebook.style"
+import { StyledDiv, List, ListItem, ListButton } from "./phonebook.style"
 export const Phonebook = ({
-    data,
-    onFindContact,
     filter,
     onDelete,
 }) => {
-    if (filter !== undefined) {
-        data = filter;
-    }
     return (
         <StyledDiv>
-            <Label>
-                Fint contacts by name
-                <Input
-                    type="text"
-                    onChange={onFindContact}
-                >
-                </Input>
-            </Label>
             <List>
-                {data.map(contact => (
+                {filter.map(contact => (
                     <ListItem key={contact.id}>
-                        <span>{contact.name}: {contact.number.substr(0,3)+"-"+contact.number.substr(3,3)+"-"+contact.number.substr(6,4)}</span>
+                        <span>{contact.name}: {contact.number}</span>
                         <ListButton onClick={() => onDelete(contact.id)} type="button">Delete</ListButton>
                     </ListItem>
                 ))}

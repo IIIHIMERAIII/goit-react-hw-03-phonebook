@@ -1,21 +1,48 @@
 import PropTypes from 'prop-types';
+import { Component } from 'react';
+import { nanoid } from 'nanoid';
 import { FormStyle, Label, FormInput, FormButton } from './form.styled';
-export const Form = ({
-    onSubmitForm,
-    onChangeName,
-    onChangePhone,
-    name,
-    number,
-}) => {
+
+export class Form extends Component {
+    state = {
+        name: '',
+        number: '',
+    };
+
+    onChange = event => {
+        const { name, value } = event.currentTarget;
+        this.setState({ [name]: value })
+    };
+
+    reset = () => {
+        this.setState({
+            name: "",
+            number: "",
+        });
+    };
+
+    onSubmit = e => {
+        e.preventDefault();
+        const contact = {
+            name: this.state.name,
+            number: this.state.number,
+            id: nanoid(5),
+        };
+        this.props.onSubmit(contact);
+        this.reset();
+    }
+
+    render() {
     return (
-        <FormStyle onSubmit={onSubmitForm}>
+        <FormStyle onSubmit={this.onSubmit}>
             <Label>
                 Name
-            <FormInput 
+                <FormInput 
+                name="name"
                 type='text'
                 placeholder='Please enter the name'
-                value={name}
-                onChange={onChangeName}
+                value={this.state.name}
+                onChange={this.onChange}
                 required
                 />
             </Label>
@@ -28,8 +55,8 @@ export const Form = ({
                 title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
                 required
                 placeholder='Please enter phone number'
-                value={number}
-                onChange={onChangePhone}
+                value={this.state.number}
+                onChange={this.onChange}
                 minlength="7"
                 maxLength="10"
                 />
@@ -38,11 +65,8 @@ export const Form = ({
         </FormStyle>
     )
 }
+};
 
 Form.propTypes = {
-    onChangeName: PropTypes.func.isRequired,
-    onChangePhone: PropTypes.func.isRequired,
-    onSubmitForm: PropTypes.func.isRequired,
-    name: PropTypes.string.isRequired,
-    number: PropTypes.string.isRequired,
+    onSubmit: PropTypes.func.isRequired,
 }
